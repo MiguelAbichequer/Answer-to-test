@@ -4,4 +4,12 @@
 
 2. o separador utilizado ';'
 
-3. a função que lê os dados: 1 - checa a extensão do arquivo 2 - retira os campos de interesse 3 - 
+3. a função que lê os dados: 1 - checa a extensão do arquivo 2 - retira os campos de interesse 3 - retorna um novo csv a ser consolidado
+
+4. a requisição, por meio da biblioteca requests, obtém os em formato HTML.
+
+5. por não estar em formato json, mas sim em HTML, é necessário realizar web scrapping para utilizar o conteúdo obtido pela requisição.
+
+6. por meio da biblioteca BeautifulSoup, é possível traduzir o HTML para uma estrutura python.
+
+7.
