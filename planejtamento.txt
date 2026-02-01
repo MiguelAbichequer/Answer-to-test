@@ -1,0 +1,7 @@
+0. download dos arquivos na base de dados.
+
+1. biblioteca pandas permite a leitura de arquivos csv compridos no formato zip.
+
+2. o separador utilizado ';'
+
+3. a função que lê os dados: 1 - checa a extensão do arquivo 2 - retira os campos de interesse 3 - 
