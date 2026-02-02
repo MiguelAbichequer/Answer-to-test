@@ -37,6 +37,8 @@ def preparar_arquivos(url):
     for arq in arquivos:
         lista_nomes.append(arq['href'])  # salva os nomes dos arquivos que serão baixados e descompactados.
         count = count + 1
+        if count == 3:
+            break
     
     uniao_df = []
     # 1 - baixar arquivos, descompactar e filtrar.
@@ -63,7 +65,7 @@ def preparar_arquivos(url):
     new['ValorDespesas'] = float(resultado['VL_SALDO_FINAL'].strip(','))
 
     """
-    print("Carregando arquivo de cadastro...")
+    print("carregando arquivo de cadastro...")
 
     df_cadastro = pd.read_csv('Relatorio_cadop.csv', sep=';')  # arquivo de cadastro das operadoras
 
@@ -80,7 +82,7 @@ def preparar_arquivos(url):
 
     # remover valores zero ou negativos
 
-    df_consolidado = df_consolidado[df_consolidado['ValorDespesas'] > 0] # falsos ou desimportantes para o somatório.
+    df_consolidado = df_consolidado[df_consolidado['ValorDespesas'] > 0]  # falsos ou desimportantes para o somatório.
 
     # padronizar CNPJ
 
@@ -90,7 +92,7 @@ def preparar_arquivos(url):
 
     colunas_finais = ['CNPJ', 'RazaoSocial', 'ANO', 'TRIMESTRE', 'ValorDespesas']
 
-    df_consolidado = df_consolidado[colunas_finais].drop_duplicates()
+    df_consolidado = df_consolidado[colunas_finais].drop_duplicates().reset_index(drop=True) # remove duplicatas e reseta o índice das colunas
 
     return df_consolidado
 
@@ -124,7 +126,7 @@ def buscar(df):
     if 'DESCRICAO' not in df.columns:
         print("Coluna 'DESCRICAO' não encontrada no arquivo.")
         return pd.DataFrame()  # DataFrame vazio se a coluna não existir
-    #DES = df[df['DESCRICAO'] == "Despesas com Eventos/Sinistros - Judicial"]  # filtro coluna DESCRICAO
+    # DES = df[df['DESCRICAO'] == "Despesas com Eventos/Sinistros - Judicial"]  # filtro coluna DESCRICAO
     DES = df[df['CD_CONTA_CONTABIL'].astype(str).str.startswith('411')]
     return DES
 
@@ -166,7 +168,7 @@ if __name__ == "__main__":
 
     print(novo)
 
-    with open('resultado.csv', 'w') as f:
+    novo.to_csv('resultado.csv', sep=';')
 
 
 
