@@ -24,6 +24,8 @@ def baixar_arquivo(url, endereco):
 
 def preparar_arquivos(url):
 
+    baixar_arquivo("https://dadosabertos.ans.gov.br/FTP/PDA/operadoras_de_plano_de_saude_ativas/Relatorio_cadop.csv", "Relatorio_cadop.csv")
+    
     requisicao = requests.get(url)
     # obter informações contidas na pasta do ano selecionado
 
@@ -52,33 +54,22 @@ def preparar_arquivos(url):
     
     resultado = pd.concat(uniao_df)  # une todos os campos de interesse contidos na faixa de tempo analisada.
 
-    """
-    new['DATA'] = resultado['DATA']
-
-    new['DATA'] = pd.to_datetime(new['DATA']) # converter para o formato de armazenamento de datas
-
-    new['DATA'] = new['DATA'].dt.year
-    new['TRIMESTRE'] = pd.Categorical(new['DATA'].dt.quarter, categories=[1,2,3,4], ordered=True)
-    new['TRIMESTRE'] = new['DATA'].dt.quarter # isolar o trimestre
-
-    new['CNPJ'] = resultado['REG_ANS']
-    new['ValorDespesas'] = float(resultado['VL_SALDO_FINAL'].strip(','))
-
-    """
     print("carregando arquivo de cadastro...")
 
-    df_cadastro = pd.read_csv('Relatorio_cadop.csv', sep=';')  # arquivo de cadastro das operadoras
+    df_cadastro = pd.read_csv('Relatorio_cadop.csv', sep=';', dtype={'CNPJ': str}) # ler o arquivo de cadastro
 
     df_consolidado = pd.merge(resultado[['REG_ANS', 'DATA', 'VL_SALDO_FINAL']], df_cadastro[['REGISTRO_OPERADORA', 'CNPJ', 'Razao_Social']], left_on='REG_ANS', right_on='REGISTRO_OPERADORA', how='left')
 
-    # estudar
-    df_consolidado['DATA'] = pd.to_datetime(df_consolidado['DATA'])
-    df_consolidado['ANO'] = df_consolidado['DATA'].dt.year
-    df_consolidado['TRIMESTRE'] = df_consolidado['DATA'].dt.quarter.astype(str) + 'T'
+    
+    df_consolidado['DATA'] = pd.to_datetime(df_consolidado['DATA']) # transforma o tipo coluna DATA em datetime64 
+    df_consolidado['ANO'] = df_consolidado['DATA'].dt.year  # separa o ano
+    df_consolidado['TRIMESTRE'] = df_consolidado['DATA'].dt.quarter.astype(str) + 'T' # separa o trimestre
 
     # valores
 
-    df_consolidado['ValorDespesas'] = pd.to_numeric(df_consolidado['VL_SALDO_FINAL'].str.replace(',', '.'), errors='coerce')
+    df_consolidado['ValorDespesas'] = pd.to_numeric(df_consolidado['VL_SALDO_FINAL'].str.replace('.', '').str.replace(',', '.'), errors='coerce')
+
+    # transforma o tipo da coluna VL_SALDO_FINAL em float, substituindo o separador decimal brasileiro (',') pelo internacional ('.')
 
     # remover valores zero ou negativos
 
@@ -168,7 +159,5 @@ if __name__ == "__main__":
 
     print(novo)
 
-    novo.to_csv('resultado.csv', sep=';')
-
-
+    novo.to_csv('consolidado_despesas.csv', sep=';')
 
