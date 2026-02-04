@@ -139,7 +139,7 @@ def descompacta_e_filtra(nome_arquivo):
                 df = pd.read_csv(os.path.join(zip_dir, nome_interno), sep=';', encoding='latin-1')
                 new_csv = buscar(df)
             elif ultimos_tres == 'lsx':
-                df = pd.read_excel(os.path.join(zip_dir, nome_interno), sep=';', encoding='latin-1')
+                df = pd.read_excel(os.path.join(zip_dir, nome_interno))
                 new_csv = buscar(df)
             else:
                 print("Formato de arquivo inválido")
