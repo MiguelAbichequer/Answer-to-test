@@ -1,3 +1,8 @@
+# RESUMO DA SOLUÇÃO
+
+O programa é capaz de baixar automaticamente arquivos .zip de uma base de dados e descompacta-los, mantendo sua integridade e estruturação. No tange à análise de dados, ele trata dificuldades geradas pelo download, por meio da atribuição correta de tipos e da separação das informações de maneira coesa e organizada. Também descarta dados absurdos e checa validade de dados reais, como CNPJ ou valores de despesa, para então calcular parâmetros estatísticos com a amostra obtida.
+
+
 # QUESTÃO 1
 
 ## 1.2 Processamento de Dados: Memória vs. Incremental
