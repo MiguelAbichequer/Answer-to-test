@@ -49,7 +49,7 @@ para ordenar de maneira descendente os dados processados.
 
 # QUESTÃO 3
 
-Por ter um conhecimento menor dessa tecnologia, consegui apenas realizar a criação das tabelas e a importação das tabelas *.csv* geradas nas questões anteriores.
+Por ter um conhecimento menor dessa tecnologia, consegui apenas realizar a criação e importação das tabelas *.csv* geradas nas questões anteriores.
 
 ## 3.2 Crie queries DDL para estruturar as tabelas.
 
