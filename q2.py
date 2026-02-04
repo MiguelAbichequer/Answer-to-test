@@ -1,10 +1,7 @@
 import pandas as pd
 import zipfile
-import os
 import requests
-from bs4 import BeautifulSoup
 import numpy as np
-import math
 from validate_docbr import CNPJ
 
 
@@ -56,7 +53,6 @@ def consolidar_dados(dataFrame):
         how='left'      
     )
 
-    # Selecione apenas as colunas solicitadas para o arquivo final
     colunas_finais = ['CNPJ', 'RazaoSocial', 'ValorDespesas', 'ANO', 'TRIMESTRE', 'Data_Registro_ANS', 'Modalidade', 'UF']
     joined_df = joined_df[colunas_finais]
 
@@ -75,7 +71,13 @@ def calcular(dataFrame):
     # agrupa por UF e RazaoSocial e calcula a média e o somatório das despesas
 
     dataFrame_agrupado.columns = ['Total_Despesas', 'Media_Despesas', 'Desvio_Padrao']
+    dataFrame_agrupado = dataFrame_agrupado.fillna(0)
+    # preencher valores NaN com 0
     # pois UF e Razão Social são colunas índice
+
+    dataFrame_agrupado = dataFrame_agrupado.sort_values(by='Total_Despesas', ascending=False)
+
+    dataFrame_agrupado = dataFrame_agrupado.round(4)
 
     return dataFrame_agrupado.reset_index()
 
@@ -89,8 +91,8 @@ if __name__ == "__main__":
 
     print(df_consolidado)
 
-    df_consolidado.to_csv("despesas_agregadas.csv", index=False, sep=';')
+    df_consolidado.to_csv("despesas_agregadas.csv", index=False, sep=';', float_format='%.2f')
 
-    with zipfile.ZipFile('despesas_agregadas.zip', 'w') as zipf:
+    with zipfile.ZipFile('Teste_Miguel_Abichequer.zip', 'w') as zipf:
         zipf.write('despesas_agregadas.csv')
 

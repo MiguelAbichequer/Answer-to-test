@@ -56,7 +56,7 @@ def preparar_arquivos(url):
 
     print("carregando arquivo de cadastro...")
 
-    df_cadastro = pd.read_csv('Relatorio_cadop.csv', sep=';', dtype={'CNPJ': str}) # ler o arquivo de cadastro
+    df_cadastro = pd.read_csv('Relatorio_cadop.csv', sep=';', encoding='latin-1', dtype={'CNPJ': str}) # ler o arquivo de cadastro
 
     df_consolidado = pd.merge(resultado[['REG_ANS', 'DATA', 'VL_SALDO_FINAL']], df_cadastro[['REGISTRO_OPERADORA', 'CNPJ', 'Razao_Social']], left_on='REG_ANS', right_on='REGISTRO_OPERADORA', how='left')
 
@@ -136,10 +136,10 @@ def descompacta_e_filtra(nome_arquivo):
             ultimos_tres = ultimos_tres.lower()
 
             if ultimos_tres == 'csv' or ultimos_tres == 'txt':
-                df = pd.read_csv(os.path.join(zip_dir, nome_interno), sep=';')
+                df = pd.read_csv(os.path.join(zip_dir, nome_interno), sep=';', encoding='latin-1')
                 new_csv = buscar(df)
             elif ultimos_tres == 'lsx':
-                df = pd.read_excel(os.path.join(zip_dir, nome_interno))
+                df = pd.read_excel(os.path.join(zip_dir, nome_interno), sep=';', encoding='latin-1')
                 new_csv = buscar(df)
             else:
                 print("Formato de arquivo inválido")
@@ -160,4 +160,7 @@ if __name__ == "__main__":
     print(novo)
 
     novo.to_csv('consolidado_despesas.csv', sep=';')
+
+    with zipfile.ZipFile('consolidado_despesas.zip', 'w') as zipf:
+        zipf.write('consolidado_despesas.csv')
 
